@@ -17,3 +17,10 @@ install:
 	cp -fr "Rome/" "$(DESTDIR)/Frameworks/"
 	install_name_tool -add_rpath "@executable_path/../Frameworks/"  "$(DESTDIR)/bin/querykit"
 
+clean:
+	rm -fr Rome build bin/querykit
+
+tarball: all
+	git checkout-index --all --prefix=build/
+	GZIP=-9 tar -czf querykit-cli.tar.gz Rome/ bin/querykit share/
+
