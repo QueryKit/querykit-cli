@@ -1,3 +1,5 @@
+<img src="https://github.com/QueryKit/QueryKit/blob/master/QueryKit.png" width=96 height=120 alt="QueryKit Logo" />
+
 # QueryKit CLI
 
 A command line tool to generate extensions for your Core Data models
