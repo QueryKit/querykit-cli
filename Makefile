@@ -22,5 +22,5 @@ clean:
 
 tarball: all
 	git checkout-index --all --prefix=build/
-	GZIP=-9 tar -czf querykit-cli.tar.gz Rome/ bin/querykit share/
+	GZIP=-9 tar -czf querykit-cli.tar.gz Makefile Rome/ bin/querykit share/
 
