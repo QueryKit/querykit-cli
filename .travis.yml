@@ -1,5 +1,8 @@
 language: objective-c
 osx_image: xcode7
+before_install:
+  - gem install cocoapods --pre --no-document
+  - gem install cocoapods-rome --no-document
 script:
   - make tarball
 deploy:
