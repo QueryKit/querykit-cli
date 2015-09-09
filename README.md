@@ -6,7 +6,20 @@ Allowing you to use Xcode generated managed object classes with QueryKit.
 
 ## Installation
 
-TODO?
+Installation can be done via [Homebrew](http://brew.sh) as follows:
+
+```shell
+$ brew install querykit/formulae/querykit-cli
+```
+
+Alternatively, you can build it yourself with Xcode 7.
+
+```shell
+$ git clone https://github.com/QueryKit/querykit-cli
+$ cd querykit-cli
+$ make
+$ make install
+```
 
 ## Usage
 
