@@ -45,10 +45,10 @@ extension Task {
 }
 
 extension Attribute where AttributeType: Task {
-  static var creator:Attribute<User> { return attribute(AttributeType.creator) }
-  static var createdAt:Attribute<NSDate> { return attribute(AttributeType.createdAt) }
-  static var name:Attribute<String> { return attribute(AttributeType.name) }
-  static var complete:Attribute<Bool> { return attribute(AttributeType.complete) }
+  var creator:Attribute<User> { return attribute(AttributeType.creator) }
+  var createdAt:Attribute<NSDate> { return attribute(AttributeType.createdAt) }
+  var name:Attribute<String> { return attribute(AttributeType.name) }
+  var complete:Attribute<Bool> { return attribute(AttributeType.complete) }
 }
 ```
 
@@ -62,7 +62,7 @@ extension User {
 }
 
 extension Attribute where AttributeType: User {
-  static var name:Attribute<String> { return attribute(AttributeType.name) }
+  var name:Attribute<String> { return attribute(AttributeType.name) }
 }
 ```
 
