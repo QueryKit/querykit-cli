@@ -5,7 +5,7 @@ import PathKit
 import Stencil
 
 
-let version = "0.1.2"
+let version = "0.1.3"
 
 extension Path {
   static var processPath:Path {
