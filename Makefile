@@ -1,8 +1,8 @@
 DESTDIR := /usr/local
 
-all: dependencies build
+all: dependencies querykit
 
-build:
+querykit:
 	xcrun -sdk macosx swiftc -O -o bin/querykit -F Rome -framework CoreData -framework PathKit -framework Stencil bin/querykit.swift
 
 dependencies:
