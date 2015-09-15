@@ -61,7 +61,7 @@ extension NSRelationshipDescription {
         type = "Set<\(type)>"
 
         if ordered {
-          type = "Ordered\(type)"
+          type = "NSOrderedSet"
         }
       }
 
