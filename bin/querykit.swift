@@ -55,7 +55,7 @@ extension NSAttributeDescription {
 extension NSRelationshipDescription {
   var qkAttributeDescription:AttributeDescription? {
     if let destinationEntity = destinationEntity {
-      var type = destinationEntity.managedObjectClassName
+      var type = destinationEntity.qk_className
 
       if toMany {
         type = "Set<\(type)>"
@@ -69,6 +69,17 @@ extension NSRelationshipDescription {
     }
 
     return nil
+  }
+}
+
+extension NSEntityDescription {
+  var qk_className:String {
+    if managedObjectClassName.hasPrefix(".") {
+      // "Current Module"
+      return managedObjectClassName.substringFromIndex(managedObjectClassName.startIndex.successor())
+    }
+
+    return managedObjectClassName
   }
 }
 
@@ -92,7 +103,7 @@ func render(entity:NSEntityDescription, destination:Path, template:Template) thr
   }
 
   let context = Context(dictionary: [
-    "className": entity.managedObjectClassName,
+    "className": entity.qk_className,
     "attributes": attributes,
     "entityName": entity.name ?? "Unknown",
   ])
@@ -117,7 +128,7 @@ func render(model:NSManagedObjectModel, destination:Path, templatePath:Path) {
 
   for entity in model.entities {
     let template = try! Template(path: templatePath)!
-    let className = entity.managedObjectClassName
+    let className = entity.qk_className
 
     if className == "NSManagedObject" {
       let name = entity.name ?? "Unknown"
