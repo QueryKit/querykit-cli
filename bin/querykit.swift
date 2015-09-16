@@ -83,6 +83,18 @@ extension NSEntityDescription {
 
     return managedObjectClassName
   }
+
+  func qk_hasSuperProperty(name:String) -> Bool {
+    if let superentity = superentity {
+      if superentity.qk_className != "NSManagedObject" && superentity.propertiesByName[name] != nil {
+        return true
+      }
+
+      return superentity.qk_hasSuperProperty(name)
+    }
+
+    return false
+  }
 }
 
 class CommandError : ErrorType {
@@ -95,6 +107,10 @@ class CommandError : ErrorType {
 
 func render(entity:NSEntityDescription, destination:Path, template:Template) throws {
   let attributes = entity.properties.flatMap { property -> AttributeDescription? in
+    if entity.qk_hasSuperProperty(property.name) {
+      return nil
+    }
+
     if let attribute = property as? NSAttributeDescription {
       return attribute.qkAttributeDescription
     } else if let relationship = property as? NSRelationshipDescription {
