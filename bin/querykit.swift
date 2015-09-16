@@ -45,8 +45,19 @@ class AttributeDescription : NSObject {
 }
 
 extension NSAttributeDescription {
+  var qkClassName:String? {
+    switch attributeType {
+      case .BooleanAttributeType:
+        return "Bool"
+      case .StringAttributeType:
+        return "String"
+      default:
+        return attributeValueClassName
+    }
+  }
+
   var qkAttributeDescription:AttributeDescription? {
-    if let className = attributeValueClassName {
+    if let className = qkClassName {
       return AttributeDescription(name: name, type: className)
     }
 
