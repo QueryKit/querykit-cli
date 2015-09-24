@@ -1,6 +1,7 @@
 #!/usr/bin/env xcrun swift -F Rome
 
 import CoreData
+import Commander
 import PathKit
 import Stencil
 
@@ -201,26 +202,20 @@ func generate(modelPath:Path, outputPath:Path) {
   }
 }
 
-func usage() {
-  let processName = Process.arguments.first!
-  print("Usage: \(processName) <model> <output-directory>")
-}
-
-func run() {
-  let arguments = Process.arguments
-
-  if arguments.contains("--help") {
-    usage()
-  } else if arguments.contains("--version") {
-    print(version)
-  } else if arguments.count != 3 {
-    usage()
-  } else {
-    let modelPath = Path(arguments[1])
-    let outputPath = Path(arguments[2])
-    generate(modelPath, outputPath: outputPath)
+extension Path: ArgumentConvertible {
+  public init(parser: ArgumentParser) throws {
+    if let path = parser.shift() {
+      self.init(path)
+    } else {
+      throw ArgumentError.MissingValue(argument: nil)
+    }
   }
 }
 
-run()
+command(
+  Argument<Path>("model"),
+  Argument<Path>("output")
+) { model, output in
+  generate(model, outputPath: output)
+}.run(version)
 
