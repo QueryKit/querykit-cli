@@ -93,3 +93,12 @@ Task.queryset(context)
   .orderBy { $0.createdAt.ascending }
 ```
 
+### Customising
+
+You may pass a custom template to the QueryKit tool, please see the standard
+template for more information on the syntax.
+
+```shell
+$ querykit Todo/Model.xcdatamodeld Todo/Model --template share/querykit/template.swift
+```
+

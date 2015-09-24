@@ -178,28 +178,11 @@ func render(model:NSManagedObjectModel, destination:Path, templatePath:Path) {
   }
 }
 
-func generate(modelPath:Path, outputPath:Path) {
-  let modelExtension = modelPath.`extension`
-  let isDataModel = modelExtension == "xcdatamodel"
-  let isDataModeld = modelExtension == "xcdatamodeld"
-
-  if isDataModel || isDataModeld {
-    if modelPath.isReadable {
-      let templatePath = Path.defaultTemplatePath
-      if !templatePath.isReadable {
-        print("Template '\(templatePath)' is not readable.")
-      } else {
-        let compiledModel = compileCoreDataModel(modelPath)
-        let modelURL = NSURL(fileURLWithPath: compiledModel.description)
-        let model = NSManagedObjectModel(contentsOfURL: modelURL)!
-        render(model, destination: outputPath, templatePath: templatePath)
-      }
-    } else {
-      print("'\(modelPath)' does not exist or is not readable.")
-    }
-  } else {
-    print("'\(modelPath)' is not a Core Data model.")
-  }
+func generate(model:Path, output:Path, template:Path) {
+  let compiledModel = compileCoreDataModel(model)
+  let modelURL = NSURL(fileURLWithPath: compiledModel.description)
+  let model = NSManagedObjectModel(contentsOfURL: modelURL)!
+  render(model, destination: output, templatePath: template)
 }
 
 extension Path: ArgumentConvertible {
@@ -212,10 +195,30 @@ extension Path: ArgumentConvertible {
   }
 }
 
+func isReadable(path:Path) -> Path {
+  if !path.isReadable {
+    print("'\(path)' does not exist or is not readable.")
+    exit(1)
+  }
+
+  return path
+}
+
+func isCoreDataModel(path:Path) -> Path {
+  let ext = path.`extension`
+  if ext == "xcdatamodel" || ext == "xcdatamodeld" {
+    return isReadable(path)
+  }
+
+  print("'\(path)' is not a Core Data model.")
+  exit(1)
+}
+
 command(
-  Argument<Path>("model"),
-  Argument<Path>("output")
-) { model, output in
-  generate(model, outputPath: output)
+  Option("template", Path.defaultTemplatePath, description: "Path to a custom template file", validator: isReadable),
+  Argument<Path>("model", validator: isCoreDataModel),
+  Argument<Path>("output", validator: isReadable)
+) { template, model, output in
+  generate(model, output: output, template: template)
 }.run(version)
 

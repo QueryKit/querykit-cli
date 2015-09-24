@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Commander:
-    :commit: 12d1c1a104e2067f2cf7dc19a1106fbbfcc95e00
+    :commit: f95711238f90dfd2391a2f8c3ce57134358e11d9
     :git: https://github.com/kylef/Commander
   Stencil:
     :commit: dcf2611ac24829ffe80cf46894ebc98fdda62e0c
