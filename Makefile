@@ -1,26 +1,14 @@
 DESTDIR := /usr/local
 
-all: dependencies querykit
-
-querykit:
-	xcrun -sdk macosx swiftc -O -o bin/querykit -F Rome -framework CoreData -framework PathKit -framework Stencil bin/querykit.swift
-
-dependencies:
-	pod install --no-integrate
-
 install:
-	mkdir -p "$(DESTDIR)/bin/"
-	mkdir -p "$(DESTDIR)/share/querykit/"
-	mkdir -p "$(DESTDIR)/Frameworks/"
-	cp -f "bin/querykit" "$(DESTDIR)/bin/"
-	cp -f "share/querykit/template.swift" "$(DESTDIR)/share/querykit/"
-	cp -fr "Rome/" "$(DESTDIR)/Frameworks/"
-	install_name_tool -add_rpath "@executable_path/../Frameworks/"  "$(DESTDIR)/bin/querykit"
+	conche install --prefix "$(DESTDIR)"
+	install -d "$(DESTDIR)/share/querykit"
+	install -C "share/querykit/template.swift" "$(DESTDIR)/share/querykit/"
+
+tarball:
+	make DESTDIR=build install
+	install -C -m 644 Makefile.binary build/Makefile
+	GZIP=-9 tar -czf querykit-cli.tar.gz build/
 
 clean:
-	rm -fr Rome build bin/querykit
-
-tarball: all
-	git checkout-index --all --prefix=build/
-	GZIP=-9 tar -czf querykit-cli.tar.gz Makefile Rome/ bin/querykit share/
-
+	rm -fr build querykit-cli.tar.gz

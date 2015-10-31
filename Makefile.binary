@@ -1,0 +1,9 @@
+DESTDIR := /usr/local
+
+LIBS=$(shell ls lib/QueryKitCLI/*.dylib)
+
+install:
+	install -d "$(DESTDIR)/bin" "$(DESTDIR)/share/querykit" "$(DESTDIR)/lib/QueryKitCLI"
+	install -C "bin/querykit" "$(DESTDIR)/bin"
+	install -C $(LIBS) "$(DESTDIR)/lib/QueryKitCLI"
+	install -C -m 644 "share/querykit/template.swift" "$(DESTDIR)/share/querykit"

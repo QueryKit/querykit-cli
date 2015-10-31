@@ -1,9 +1,8 @@
 language: objective-c
-osx_image: xcode7
-before_install:
-  - gem install cocoapods --pre --no-document
-  - gem install cocoapods-rome --no-document
+osx_image: xcode7.1
+install: brew install --HEAD kylef/formulae/conche
 script:
+  - conche build
   - make tarball
 deploy:
   provider: releases

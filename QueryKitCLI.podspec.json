@@ -1,0 +1,15 @@
+{
+  "name": "QueryKitCLI",
+  "version": "0.2.0",
+  "dependencies": {
+    "Stencil": ["~> 0.4.0"],
+    "PathKit": [],
+    "Commander": ["~> 0.2.2"]
+  },
+  "source_files": "QueryKitCLI/QueryKit.swift",
+  "entry_points": {
+    "cli": {
+      "querykit": "bin/querykit.swift"
+    }
+  }
+}
