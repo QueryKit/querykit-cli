@@ -1,15 +1,6 @@
 language: objective-c
-osx_image: xcode7.1
-install: brew install --HEAD kylef/formulae/conche
+osx_image: xcode7.2
+install:
+  - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
 script:
-  - conche build
-  - make tarball
-deploy:
-  provider: releases
-  api_key:
-    secure: AWdDOX3o8yy98t6huoH97cYF2NUmZzWp7b8hECCXBct2lTmdVFA3kPC3AjqkBi1e2047TbhDUa9mvVN0xV06IjWCpEEVnh3eGk8IxLv/EM2ZP14sLnIWtNtLVtibAdPENeAqQ46/qwra6Ubt0WQ/EzLj37u5JUxIKUCaE0p4EdnyMF3lTKPw1g3QdTJidQfmcbvPUeejFo8KYiZZvndj0p5J+Ce6VrdxdhsPEDUm9IqG9js5hFsfOE3/MU+rhnW+0Kbk/ABo9MtV3YIQMBPwT9+IDDbe8z/M0g4KhY3EFxugY9DkOmuS7/kPGuhLtSBbUmOrgWfKzownmgjwYKN/ivXozn4pXsc4cjIMf+CEQlGWoFdTP2EaLpUMo99uBeWPZO8UPe1TfhPwtSuPmYHy/+xOXiFLhKBpbgeWxRMB/y6A3T5daSO3gDOJPuOLjIxp0jST/NkP6yskeTDu1J75noqdrpsWykvbMe4edcKup5Xhibvqnvsb0ghhkPuyetmF3K7VJskx4r2j3FG76q1syFCt3VA2ampyAjQ+gyG1HlFJ39qWZ/19dE3maN6uVT00LI5AqJz/unSDyelrz4gckztjvxNoUmKmVIw3HfdeRXFHXuicyySYtdc6zyt3whjllxstAi4gtIlQTyJlPBoDEP6waPCM8b5IP+An5l/ACpM=
-  file: querykit-cli.tar.gz
-  skip_cleanup: true
-  on:
-    repo: QueryKit/querykit-cli
-    tags: true
+  - make build

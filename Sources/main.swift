@@ -1,7 +1,6 @@
 import Darwin.libc
 import PathKit
 import Commander
-import QueryKitCLI
 
 
 let version = "0.2.0"

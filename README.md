@@ -14,12 +14,11 @@ Installation can be done via [Homebrew](http://brew.sh) as follows:
 $ brew install querykit/formulae/querykit-cli
 ```
 
-Alternatively, you can build it yourself with Xcode 7.
+Alternatively, you can build it yourself with the Swift package manager.
 
 ```shell
 $ git clone https://github.com/QueryKit/querykit-cli
 $ cd querykit-cli
-$ make
 $ make install
 ```
 

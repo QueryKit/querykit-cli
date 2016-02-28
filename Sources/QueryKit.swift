@@ -27,7 +27,8 @@ extension Path {
 
 func compileCoreDataModel(source: Path) -> Path {
   let destinationExtension = source.`extension`!.hasSuffix("d") ? ".momd" : ".mom"
-  let destination = try! Path.uniqueTemporary() + (source.lastComponentWithoutExtension + destinationExtension)
+  let filename = source.lastComponentWithoutExtension + destinationExtension
+  let destination = try! Path.uniqueTemporary() + Path(filename)
   system("xcrun momc \(source.absolute()) \(destination.absolute())")
   return destination
 }
