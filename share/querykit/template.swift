@@ -4,7 +4,7 @@
 import QueryKit
 
 /// Extension to {{ className }} providing an QueryKit attribute descriptions.
-extension {{ className }} {{% for attribute in attributes %}
+extension {{ className }} {{ "{" }}{% for attribute in attributes %}
   static var {{ attribute.name }}:Attribute<{{ attribute.type }}> { return Attribute("{{ attribute.name }}") }{% endfor %}
 
   class func queryset(context:NSManagedObjectContext) -> QuerySet<{{ className }}> {
@@ -12,7 +12,7 @@ extension {{ className }} {{% for attribute in attributes %}
   }
 }
 
-extension Attribute where AttributeType: {{ className }} {{% for attribute in attributes %}
+extension Attribute where AttributeType: {{ className }} {{ "{" }}{% for attribute in attributes %}
   var {{ attribute.name }}:Attribute<{{ attribute.type }}> { return attribute(AttributeType.{{ attribute.name }}) }{% endfor %}
 }
 
