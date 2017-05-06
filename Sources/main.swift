@@ -11,7 +11,7 @@ command(
   Argument<Path>("output", validator: isReadable)
 ) { template, model, output in
   do {
-    try generate(model, output: output, template: template)
+    try generate(model: model, output: output, template: template)
   } catch {
     print(error)
     exit(1)
