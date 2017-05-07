@@ -150,7 +150,9 @@ func render(model: NSManagedObjectModel, destination: Path, templatePath: Path) 
   }
 
   for entity in model.entities {
-    let template = try Template(path: templatePath)
+    let loader = FileSystemLoader(paths: [templatePath.parent().absolute()])
+    let environment = Environment(loader: loader)
+    let template = try environment.loadTemplate(name: templatePath.lastComponent)
     let className = entity.qk_className
 
     if className == "NSManagedObject" {
