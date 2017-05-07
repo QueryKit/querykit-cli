@@ -7,13 +7,13 @@ import Stencil
 
 extension Path {
   static var processPath: Path {
-    if Process.arguments[0].componentsSeparatedByString(Path.separator).count > 1 {
-      return Path.current + Process.arguments[0]
+    if ProcessInfo.processInfo.arguments[0].components(separatedBy: Path.separator).count > 1 {
+      return Path.current + ProcessInfo.processInfo.arguments[0]
     }
 
-    let PATH = NSProcessInfo.processInfo().environment["PATH"]!
-    let paths = PATH.componentsSeparatedByString(":").map {
-      Path($0) + Process.arguments[0]
+    let PATH = ProcessInfo.processInfo.environment["PATH"]!
+    let paths = PATH.components(separatedBy: ":").map {
+      Path($0) + ProcessInfo.processInfo.arguments[0]
     }.filter { $0.exists }
 
     return paths.first!
@@ -25,11 +25,16 @@ extension Path {
 }
 
 
-func compileCoreDataModel(source: Path) -> Path {
+func compileCoreDataModel(_ source: Path) -> Path {
   let destinationExtension = source.`extension`!.hasSuffix("d") ? ".momd" : ".mom"
   let filename = source.lastComponentWithoutExtension + destinationExtension
   let destination = try! Path.uniqueTemporary() + Path(filename)
-  system("xcrun momc \(source.absolute()) \(destination.absolute())")
+  
+  Process.launchedProcess(
+    launchPath: "/usr/bin/xcrun",
+    arguments: ["momc", source.absolute().string, destination.absolute().string]
+  ).waitUntilExit()
+  
   return destination
 }
 
@@ -46,9 +51,9 @@ class AttributeDescription : NSObject {
 extension NSAttributeDescription {
   var qkClassName: String? {
     switch attributeType {
-      case .BooleanAttributeType:
+      case .booleanAttributeType:
         return "Bool"
-      case .StringAttributeType:
+      case .stringAttributeType:
         return "String"
       default:
         return attributeValueClassName
@@ -69,10 +74,10 @@ extension NSRelationshipDescription {
     if let destinationEntity = destinationEntity {
       var type = destinationEntity.qk_className
 
-      if toMany {
+      if isToMany {
         type = "Set<\(type)>"
 
-        if ordered {
+        if isOrdered {
           type = "NSOrderedSet"
         }
       }
@@ -88,13 +93,13 @@ extension NSEntityDescription {
   var qk_className: String {
     if managedObjectClassName.hasPrefix(".") {
       // "Current Module"
-      return managedObjectClassName.substringFromIndex(managedObjectClassName.startIndex.successor())
+      return managedObjectClassName.substring(from: managedObjectClassName.index(after: managedObjectClassName.startIndex))
     }
 
     return managedObjectClassName
   }
 
-  func qk_hasSuperProperty(name: String) -> Bool {
+  func qk_hasSuperProperty(_ name: String) -> Bool {
     if let superentity = superentity {
       if superentity.qk_className != "NSManagedObject" && superentity.propertiesByName[name] != nil {
         return true
@@ -107,7 +112,7 @@ extension NSEntityDescription {
   }
 }
 
-class CommandError : ErrorType {
+class CommandError : Error {
   let description: String
 
   init(description: String) {
@@ -130,11 +135,11 @@ func render(entity: NSEntityDescription, destination: Path, template: Template) 
     return nil
   }
 
-  let context = Context(dictionary: [
+  let context: [String: Any] = [
     "className": entity.qk_className,
     "attributes": attributes,
     "entityName": entity.name ?? "Unknown",
-  ])
+  ]
 
   try destination.write(try template.render(context))
 }
@@ -145,7 +150,9 @@ func render(model: NSManagedObjectModel, destination: Path, templatePath: Path) 
   }
 
   for entity in model.entities {
-    let template = try Template(path: templatePath)
+    let loader = FileSystemLoader(paths: [templatePath.parent().absolute()])
+    let environment = Environment(loader: loader)
+    let template = try environment.loadTemplate(name: templatePath.lastComponent)
     let className = entity.qk_className
 
     if className == "NSManagedObject" {
@@ -157,7 +164,7 @@ func render(model: NSManagedObjectModel, destination: Path, templatePath: Path) 
     let destinationFile = destination + (className + "+QueryKit.swift")
 
     do {
-      try render(entity, destination: destinationFile, template: template)
+      try render(entity: entity, destination: destinationFile, template: template)
       print("-> Generated '\(className)' '\(destinationFile)'")
     } catch {
       print(error)
@@ -167,9 +174,9 @@ func render(model: NSManagedObjectModel, destination: Path, templatePath: Path) 
 
 public func generate(model: Path, output: Path, template: Path) throws {
   let compiledModel = compileCoreDataModel(model)
-  let modelURL = NSURL(fileURLWithPath: compiledModel.description)
-  let model = NSManagedObjectModel(contentsOfURL: modelURL)!
-  try render(model, destination: output, templatePath: template)
+  let modelURL = URL(fileURLWithPath: compiledModel.description)
+  let model = NSManagedObjectModel(contentsOf: modelURL)!
+  try render(model: model, destination: output, templatePath: template)
 }
 
 extension Path: ArgumentConvertible {
@@ -177,12 +184,12 @@ extension Path: ArgumentConvertible {
     if let path = parser.shift() {
       self.init(path)
     } else {
-      throw ArgumentError.MissingValue(argument: nil)
+      throw ArgumentError.missingValue(argument: nil)
     }
   }
 }
 
-public func isReadable(path: Path) -> Path {
+public func isReadable(_ path: Path) -> Path {
   if !path.isReadable {
     print("'\(path)' does not exist or is not readable.")
     exit(1)
@@ -191,7 +198,7 @@ public func isReadable(path: Path) -> Path {
   return path
 }
 
-public func isCoreDataModel(path: Path) -> Path {
+public func isCoreDataModel(_ path: Path) -> Path {
   let ext = path.`extension`
   if ext == "xcdatamodel" || ext == "xcdatamodeld" {
     return isReadable(path)
