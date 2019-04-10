@@ -1,2 +1,11 @@
 /.build/
 /Packages/
+.DS_Store
+/querykit.xcodeproj/project.pbxproj
+/querykit.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+/querykit.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+/querykit.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+/querykit.xcodeproj/project.xcworkspace/xcuserdata/enzo.xcuserdatad/UserInterfaceState.xcuserstate
+/querykit.xcodeproj/xcshareddata/xcschemes/querykit-Package.xcscheme
+/querykit.xcodeproj/xcshareddata/xcschemes/querykitPackageDescription.xcscheme
+/querykit.xcodeproj/xcuserdata/enzo.xcuserdatad/xcschemes/xcschememanagement.plist
