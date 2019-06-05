@@ -137,6 +137,7 @@ func render(entity: NSEntityDescription, destination: Path, template: Template) 
 
   let context: [String: Any] = [
     "className": entity.qk_className,
+    "isAbstract": entity.isAbstract,
     "attributes": attributes,
     "entityName": entity.name ?? "Unknown",
   ]
