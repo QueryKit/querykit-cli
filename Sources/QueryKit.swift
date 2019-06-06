@@ -38,7 +38,7 @@ func compileCoreDataModel(_ source: Path) -> Path {
   return destination
 }
 
-class AttributeDescription : NSObject {
+struct AttributeDescription {
   let name: String
   let type: String
 
@@ -121,7 +121,7 @@ class CommandError : Error {
 }
 
 func render(entity: NSEntityDescription, destination: Path, template: Template) throws {
-  let attributes = entity.properties.flatMap { property -> AttributeDescription? in
+  let attributes = entity.properties.compactMap { property -> AttributeDescription? in
     if entity.qk_hasSuperProperty(property.name) {
       return nil
     }
@@ -137,6 +137,7 @@ func render(entity: NSEntityDescription, destination: Path, template: Template) 
 
   let context: [String: Any] = [
     "className": entity.qk_className,
+    "isAbstract": entity.isAbstract,
     "attributes": attributes,
     "entityName": entity.name ?? "Unknown",
   ]
