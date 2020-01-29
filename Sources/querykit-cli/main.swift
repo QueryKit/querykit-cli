@@ -6,7 +6,7 @@ import Commander
 let version = "0.2.0"
 
 command(
-  Option("template", Path.defaultTemplatePath, description: "Path to a custom template file", validator: isReadable),
+  Option("template", default: Path.defaultTemplatePath, description: "Path to a custom template file", validator: isReadable),
   Argument<Path>("model", validator: isCoreDataModel),
   Argument<Path>("output", validator: isReadable)
 ) { template, model, output in
