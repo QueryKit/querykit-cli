@@ -1,6 +1,7 @@
 DESTDIR := /usr/local
 
 build:
+	@echo "DEPRECATED: QueryKit CLI is no longer needed, QueryKit 0.14.0 works with KeyPath, see https://github.com/QueryKit/QueryKit/pull/55."
 	@swift build --configuration release
 
 install: build

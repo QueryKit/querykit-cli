@@ -1,5 +1,8 @@
 <img src="https://github.com/QueryKit/QueryKit/blob/master/QueryKit.png" width=96 height=120 alt="QueryKit Logo" />
 
+__DEPRECATED__: _QueryKit CLI is no longer needed, QueryKit 0.14.0 works with
+KeyPath, see https://github.com/QueryKit/QueryKit/pull/55._
+
 # QueryKit CLI
 
 A command line tool to generate extensions for your Core Data models
